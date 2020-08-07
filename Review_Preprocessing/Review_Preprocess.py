@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     in_reviews_csv_file = args.in_reviews_file
     out_reviews_csv_file = args.out_reviews_file
-    word_frequency_threshold = args.word_frequency_threshold
+    word_frequency_threshold = int(args.word_frequency_threshold)
 
     print ('in_reviews_csv_file=' ,  in_reviews_csv_file)
 
@@ -128,7 +128,7 @@ if __name__ == '__main__':
     # Exclude stopwords with Python's list comprehension and pandas.DataFrame.apply.
     df_reviews['text_without_stopwords'] = df_reviews['lower_text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop)]))
 
-    print(df_reviews['text_without_stopwords'])
+    #print(df_reviews['text_without_stopwords'])
 
     print_time ()
     print ('4. Remove rarely used words ...')
@@ -141,9 +141,7 @@ if __name__ == '__main__':
 
     # List of words with count higher than the threshold
     high_count_words = df_reviews_wc [df_reviews_wc["wcount"] > word_frequency_threshold ]["name"].values.tolist()
-    print ('Words appearing more than the threshold')
-    # print(high_count_words)
-    print('Number of words:', len(high_count_words))
+    print ('Words appearing more times than the threshold (',word_frequency_threshold, '):', len(high_count_words))
 
     print_time ()
     print("Removing low count words...")
@@ -151,13 +149,11 @@ if __name__ == '__main__':
     df_reviews['text_without_rarewords'] = df_reviews['text_without_stopwords'].apply(lambda x: ' '.join([word for word in x.split() if word in (high_count_words)]))
     print_time ()
 
-    print(df_reviews['text_without_rarewords'])
-
     df_reviews ["word count"] = df_reviews["text_without_rarewords"].str.split().str.len()
 
     print_time ()
 
-    print ('3.5. Tidy up ...')
+    print ('5. Tidy up ...')
     # Rename the text column
     # do it before creating review_df to avoid 'SettingWithCopyWarning'
     df_reviews.rename(columns={'text': 'original_text', 'text_without_rarewords': 'text'}, inplace=True)
