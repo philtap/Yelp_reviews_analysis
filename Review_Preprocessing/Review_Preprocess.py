@@ -43,7 +43,7 @@ def statistics (df):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description = 'remove line breaks from a CSV file'
+        description = 'Preprocess a csv file containing Yelp text reviews'
     )
 
     parser.add_argument(
