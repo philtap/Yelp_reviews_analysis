@@ -154,16 +154,22 @@ if __name__ == '__main__':
     print_time ()
 
     print ('5. Tidy up ...')
-    # Rename the text column
+    print("Rename columns")
     # do it before creating review_df to avoid 'SettingWithCopyWarning'
     df_reviews.rename(columns={'text': 'original_text', 'text_without_rarewords': 'text'}, inplace=True)
 
+    print("Drop unnecessary columns")
     # Drop columns no longer required, rather than create a new dataframe view 'review_df'
     # Setting values in 'review_df' (if it's a view), will result in 'SettingWithCopyWarning', and the results may not be as expected
     df_reviews.drop(df_reviews.columns.difference(['date','review_id','business_id' , 'text', 'stars', 'label', 'word count']), 1,
         inplace=True)
 
-    df_reviews_out = df_reviews
+    # Remove reviews with empty text
+    print("Remove reviews with empty text")
+
+    #print("Reviews with empty text")
+    #print(df_reviews[df_reviews['text'].isnull()])
+    df_reviews_out=df_reviews.dropna()
 
     ####################################
     # Final statistics
