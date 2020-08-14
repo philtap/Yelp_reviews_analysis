@@ -155,32 +155,32 @@ if __name__ == '__main__':
 
     print ('5. Tidy up ...')
     print("Rename columns")
-    # do it before creating review_df to avoid 'SettingWithCopyWarning'
+
     df_reviews.rename(columns={'text': 'original_text', 'text_without_rarewords': 'text'}, inplace=True)
 
     print("Drop unnecessary columns")
-    # Drop columns no longer required, rather than create a new dataframe view 'review_df'
-    # Setting values in 'review_df' (if it's a view), will result in 'SettingWithCopyWarning', and the results may not be as expected
     df_reviews.drop(df_reviews.columns.difference(['date','review_id','business_id' , 'text', 'stars', 'label', 'word count']), 1,
         inplace=True)
 
+    print("Reviews with empty text")
+    print(df_reviews[df_reviews['text'].isnull()])
+
     # Remove reviews with empty text
     print("Remove reviews with empty text")
+    df_reviews=df_reviews.dropna()
 
-    #print("Reviews with empty text")
-    #print(df_reviews[df_reviews['text'].isnull()])
-    df_reviews_out=df_reviews.dropna()
-
+    print("Reviews with empty text")
+    print(df_reviews[df_reviews['text'].isnull()])
     ####################################
     # Final statistics
     ####################################
     print ("-----------------------------------------------------------------")
     print ("Final statistics after pre-processing")
     print ("-----------------------------------------------------------------")
-    statistics(df_reviews_out)
+    statistics(df_reviews)
 
     ####################################
     # Save preprocessed file to csv
     ####################################
     with open( out_reviews_csv_file, 'w') as csv_file:
-        df_reviews_out.to_csv(path_or_buf=csv_file)
+        df_reviews.to_csv(path_or_buf=csv_file)
