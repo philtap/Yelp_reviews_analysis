@@ -5,6 +5,7 @@
 # Requirements
 ####################################
 
+import numpy as np
 import argparse
 from datetime import datetime
 
@@ -264,8 +265,133 @@ if __name__ == '__main__':
     if model_to_run == 4:
         print('Model 4')
 
+        tokenizer = Tokenizer(num_words=5000)
+        tokenizer.fit_on_texts(reviews_train)
+
+        X_train = tokenizer.texts_to_sequences(reviews_train)
+        X_test = tokenizer.texts_to_sequences(reviews_test)
+
+        vocab_size = len(tokenizer.word_index) + 1  # Adding 1 because of reserved 0 index
+
+        print(reviews_train[2])
+        print(X_train[2])
+
+        # Use 500 as the CURRENT Max number of words per review: 448
+        maxlen = 500
+
+        X_train = pad_sequences(X_train, padding='post', maxlen=maxlen)
+        X_test = pad_sequences(X_test, padding='post', maxlen=maxlen)
+
+        def create_embedding_matrix(filepath, word_index, embedding_dim):
+            vocab_size = len(word_index) + 1  # Adding again 1 because of reserved 0 index
+            embedding_matrix = np.zeros((vocab_size, embedding_dim))
+
+            with open(filepath) as f:
+                for line in f:
+                    word, *vector = line.split()
+                    if word in word_index:
+                        idx = word_index[word]
+                        embedding_matrix[idx] = np.array(
+                            vector, dtype=np.float32)[:embedding_dim]
+
+            return embedding_matrix
+        embedding_dim = 50
+        embedding_matrix = create_embedding_matrix(
+                'data/glove_word_embeddings/glove.6B.50d.txt', tokenizer.word_index, embedding_dim)
+
+        nonzero_elements = np.count_nonzero(np.count_nonzero(embedding_matrix, axis=1))
+        print ('Percentage of words in the prtrained model',nonzero_elements / vocab_size)
+
+        model = Sequential()
+
+        model.add(layers.Embedding(vocab_size, embedding_dim,
+                                   weights=[embedding_matrix],
+                                   input_length=maxlen,
+                                   trainable=True))
+
+        model.add(layers.GlobalMaxPool1D())
+        model.add(layers.Dense(10, activation='relu'))
+        model.add(layers.Dense(1, activation='sigmoid'))
+        model.compile(optimizer='adam',
+                      loss='binary_crossentropy',
+                      metrics=['accuracy'])
+        model.summary()
+
+        history = model.fit(X_train, y_train,
+                            epochs=number_epochs,
+                            verbose=False,
+                            validation_data=(X_test, y_test),
+                            batch_size=10)
+
+        loss, accuracy = model.evaluate(X_train, y_train, verbose=False)
+        print("Training Accuracy: {:.4f}".format(accuracy))
+        loss, accuracy = model.evaluate(X_test, y_test, verbose=False)
+        print("Testing Accuracy:  {:.4f}".format(accuracy))
+        plot_history(history)
+
+
     if model_to_run == 5:
         print('Model 5')
+
+        tokenizer = Tokenizer(num_words=5000)
+        tokenizer.fit_on_texts(reviews_train)
+
+        X_train = tokenizer.texts_to_sequences(reviews_train)
+        X_test = tokenizer.texts_to_sequences(reviews_test)
+
+        vocab_size = len(tokenizer.word_index) + 1  # Adding 1 because of reserved 0 index
+
+        print(reviews_train[2])
+        print(X_train[2])
+
+        # Use 500 as the CURRENT Max number of words per review: 448
+        maxlen = 500
+
+        X_train = pad_sequences(X_train, padding='post', maxlen=maxlen)
+        X_test = pad_sequences(X_test, padding='post', maxlen=maxlen)
+
+        def create_embedding_matrix(filepath, word_index, embedding_dim):
+            vocab_size = len(word_index) + 1  # Adding again 1 because of reserved 0 index
+            embedding_matrix = np.zeros((vocab_size, embedding_dim))
+
+            with open(filepath) as f:
+                for line in f:
+                    word, *vector = line.split()
+                    if word in word_index:
+                        idx = word_index[word]
+                        embedding_matrix[idx] = np.array(
+                            vector, dtype=np.float32)[:embedding_dim]
+
+            return embedding_matrix
+        embedding_dim = 50
+        embedding_matrix = create_embedding_matrix(
+            'data/glove_word_embeddings/glove.6B.50d.txt', tokenizer.word_index, embedding_dim)
+
+        nonzero_elements = np.count_nonzero(np.count_nonzero(embedding_matrix, axis=1))
+        print ('Percentage of words in the prtrained model',nonzero_elements / vocab_size)
+        embedding_dim = 100
+
+        model = Sequential()
+        model.add(layers.Embedding(vocab_size, embedding_dim, input_length=maxlen))
+        model.add(layers.Conv1D(128, 5, activation='relu'))
+        model.add(layers.GlobalMaxPooling1D())
+        model.add(layers.Dense(10, activation='relu'))
+        model.add(layers.Dense(1, activation='sigmoid'))
+        model.compile(optimizer='adam',
+                      loss='binary_crossentropy',
+                      metrics=['accuracy'])
+        model.summary()
+
+        history = model.fit(X_train, y_train,
+                            epochs=number_epochs,
+                            verbose=False,
+                            validation_data=(X_test, y_test),
+                            batch_size=10)
+        loss, accuracy = model.evaluate(X_train, y_train, verbose=False)
+        print("Training Accuracy: {:.4f}".format(accuracy))
+        loss, accuracy = model.evaluate(X_test, y_test, verbose=False)
+        print("Testing Accuracy:  {:.4f}".format(accuracy))
+        plot_history(history)
 
     if model_to_run == 6:
         print('Model 6')
