@@ -3,7 +3,7 @@
 #
 #  Review_Preprocess.py
 #
-# This python program take as input a file containing reviews and applies preprocessing
+# This python program takes as input a csv file containing reviews and applies preprocessing to the review text
 # using Natural Language Processing (NLP)
 # It does the following:
 # - converts review text to lowercase
@@ -23,9 +23,9 @@
 # 3. Word Frequency Threshold:
 #
 # Example of usage:
-# ./Execute_Review_Preprocess.sh /home/hduser/Desktop/DMML2/yelp_dataset/sample_reviews/reviews_stratified.csv
-#                                /home/hduser/Desktop/DMML2/yelp_dataset/processed_review_data/reviews_preprocessed.csv
-#                                5
+# python3 Review_Analysis.py  /home/hduser/Desktop/DMML2/yelp_dataset/sample_reviews/reviews_stratified.csv
+#                             /home/hduser/Desktop/DMML2/yelp_dataset/processed_review_data/reviews_preprocessed.csv
+#                             5
 ########################################################################################################################
 
 #########################################

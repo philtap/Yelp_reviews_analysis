@@ -3,6 +3,9 @@
 #
 # Script: Execute_Review_Preprocess.sh
 #
+# This is the shell script to use to execute the Review_Preprocess.py program
+# See description in the .py file
+#
 ########################################################################################################################
 # Parameters:
 # 1. Input Review local file path and name: $1
@@ -29,7 +32,6 @@ echo Word Frequency Threshold: $3
 echo ----------------------------------------------------------
 echo Running Review_Preprocess.py ....
 echo ----------------------------------------------------------
-#wget https://raw.githubusercontent.com/philtap/Yelp_reviews_analysis/master/Review_Preprocessing/Review_Preprocess.py
 python3 Review_Preprocess.py $1 $2 $3
-#rm Review_Preprocess.py
+
 
