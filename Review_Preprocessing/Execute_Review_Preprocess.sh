@@ -29,7 +29,7 @@ echo Word Frequency Threshold: $3
 echo ----------------------------------------------------------
 echo Running Review_Preprocess.py ....
 echo ----------------------------------------------------------
-wget https://raw.githubusercontent.com/philtap/Yelp_reviews_analysis/master/Review_Preprocessing/Review_Preprocess.py
+#wget https://raw.githubusercontent.com/philtap/Yelp_reviews_analysis/master/Review_Preprocessing/Review_Preprocess.py
 python3 Review_Preprocess.py $1 $2 $3
-rm Review_Preprocess.py
+#rm Review_Preprocess.py
 
