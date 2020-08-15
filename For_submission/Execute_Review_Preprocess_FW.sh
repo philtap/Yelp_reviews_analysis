@@ -17,9 +17,11 @@
 #                                /home/hduser/Desktop/DMML2/yelp_dataset/processed_review_data/reviews_preprocessed.csv
 #                                5
 ########################################################################################################################
+#./Execute_Review_Preprocess_FW.sh /home/hduser/Desktop/DMML2/yelp_dataset/sample_reviews/reviews_stratified.csv /home/hduser/Desktop/DMML2/yelp_dataset/processed_review_data/reviews_preprocessed_fw.csv 5 >
+# Execute_Review_Preprocess_FW_5.log
 
 echo **********************************************************
-echo      Script:Execute_Review_Preprocess.sh
+echo      Script:Execute_Review_Preprocess_FW.sh
 echo **********************************************************
 
 echo ----------------------------------------------------------
@@ -30,8 +32,8 @@ echo Output review local subset file path and name: $2
 echo Word Frequency Threshold: $3
 
 echo ----------------------------------------------------------
-echo Running Review_Preprocess.py ....
+echo Review_Preprocess_FrequentWords ....
 echo ----------------------------------------------------------
-python3 Review_Preprocess.py $1 $2 $3
+python3 Review_Preprocess_FrequentWords.py $1 $2 $3
 
 

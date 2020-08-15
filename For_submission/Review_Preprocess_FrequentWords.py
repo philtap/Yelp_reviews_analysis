@@ -110,7 +110,7 @@ if __name__ == '__main__':
                              , delimiter = '|'
                              , quotechar = "'"
                              , escapechar = '\\'
-                             #, nrows = 100
+                             , nrows = 10000
                              )
 
     print ("Columns in dataframe: ", list(df_reviews.columns))
@@ -154,7 +154,7 @@ if __name__ == '__main__':
 
     print_time ()
 
-    print ('5. Tidy up ...')
+    print ('Tidy up ...')
     print("Rename columns")
 
     df_reviews.rename(columns={'text': 'original_text', 'text_without_rarewords': 'text'}, inplace=True)
