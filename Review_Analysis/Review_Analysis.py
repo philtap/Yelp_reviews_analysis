@@ -12,6 +12,7 @@
 # Example of usage: Run model 3 on preprocessed data with 5 epochs
 # ./Execute_Review_Analysis.sh /home/hduser/Desktop/DMML2/yelp_dataset/processed_review_data/reviews_preprocessed.csv 3 5
 #
+# Origin: https://github.com/philtap/Yelp_reviews_analysis/blob/master/Review_Analysis/Review_Analysis.py
 ########################################################################################################################
 # Description:
 # The program takes as input a file containing preprocessed sample reviews

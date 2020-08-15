@@ -3,6 +3,8 @@
 #
 #  Review_Preprocess_FrequentWords.py
 #
+# Origin: https://github.com/philtap/Yelp_reviews_analysis/blob/master/For_submission/Review_Preprocess_FrequentWords.py
+#
 # This python program is a subset of Review_Preprocess.py
 # It takes as input a csv file containing reviews and applies preprocessing to the review text
 # using Natural Language Processing (NLP)
