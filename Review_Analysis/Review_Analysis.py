@@ -1,6 +1,31 @@
-#######################################################################################
+########################################################################################################################
 # Yelp - review text analysis
-#######################################################################################
+#
+#  Review_Analysis.py
+#
+########################################################################################################################
+# Parameters:
+# 1. Input Review local file path and name
+# 2. Input Model number to run
+# 3. Number of epochs to run
+#
+# Example of usage: Run model 3 on preprocessed data with 5 epochs
+# ./Execute_Review_Analysis.sh /home/hduser/Desktop/DMML2/yelp_dataset/processed_review_data/reviews_preprocessed.csv 3 5
+#
+########################################################################################################################
+# Description:
+# The program takes as input a file containing preprocessed sample reviews
+# Note: the Review_Preprocess.py preprocessing program is run using Execute_Review_Preprocess.sh
+#
+# The program can run one model on the reviews, based on the second parameter
+# There are 5 models available
+# 1: Random forest model
+# 2: Simple Neural Networks model
+# 3. Neural Networks model using word embeddings
+# 4. Neural Networks model pre-trained using word embeddings
+# 5. Neural Networks model pre-trained using word embeddings and a Convoluted layer
+# The last parameter is the number of epochs (used for Neural Networks models only)
+
 ####################################
 # Requirements
 ####################################
