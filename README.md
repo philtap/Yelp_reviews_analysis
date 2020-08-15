@@ -20,15 +20,22 @@ Parameters:
 ```
 Execute_Review_Preprocess.sh <input review file > <output review file> <threshold>
 ```
-## Review Analysis
+## Analysis of review text 
 
-Perform Machine learning analysis of Yelp Restaurant reviews: predict number of Stars based on the review text 
+Perform Machine learning analysis of Yelp Restaurant reviews: predict number of Stars (1-5) based on the review text 
 
 The code is in the "Review_Analysis" folder:
+- Execute_Review_Analysis.sh 
+- Review_Analyis.py
 
-...in progress...
+1. Input review file: local file path (including file name) of the sample preprocessed reviews csv file
+2. Number of the Machine learning  model to run (1-5)
+3. Number of epochs (for Neural Networks models: 2-5)
 
-### Installation
+```
+Execute_Review_Analysis.sh <input review file > <model to run> <number of epochs>
+```
+## Installation
 Install dependencies via
 ```
     pip3 install -r requirements.txt
