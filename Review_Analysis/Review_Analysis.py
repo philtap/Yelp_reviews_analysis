@@ -40,9 +40,7 @@ def print_time ():
     print("date and time =", dt_string)
 
 def plot_history (history):
-    # list all data in history
-    #print(history.history.keys())
-    # summarize history for accuracy
+    # summarise history for accuracy (training and test sets)
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
     plt.title('model accuracy')
@@ -50,7 +48,7 @@ def plot_history (history):
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
     plt.show()
-    # summarize history for loss
+    # summarise history for loss (training and test sets)
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
     plt.title('model loss')
@@ -104,10 +102,10 @@ if __name__ == '__main__':
 
     print('Remove any review with no words')
     print("Number of rows in dataframe:", len(df["text"]))
-    #print(df[df['text'].isnull()])
+
     df=df.dropna()
-    print("Number of rows in dataframe:", len(df["text"]))
-    #print(df[df['text'].isnull()])
+    print("Number of rows in dataframe before modelling:", len(df["text"]))
+
 
     ########################################
     # Try a base model
@@ -119,13 +117,13 @@ if __name__ == '__main__':
     # Split the data into a training and testing set
     reviews_train, reviews_test, y_train, y_test = train_test_split( reviews, y, test_size=0.25, random_state=1000)
 
-    # Use BOW model to vectorize the sentences (CountVectorizer)
-    # Since testing data may not be available during training, create the vocabulary using only the training data.
-    # Using this vocabulary,  create the feature vectors for each sentence of the training and testing set:
-
+    # Use BOW model to vectorize the sentences
     vectorizer = CountVectorizer()
+
+    # Create the vocabulary using only the training data.
     vectorizer.fit(reviews_train)
 
+    # Using this vocabulary,  create the feature vectors for each review in the training and testing set:
     X_train = vectorizer.transform(reviews_train)
     X_test  = vectorizer.transform(reviews_test)
 
@@ -186,7 +184,7 @@ if __name__ == '__main__':
 
         history = model.fit(X_train, y_train,
                             epochs=number_epochs,
-                            verbose=False,
+                            verbose=True,
                             validation_data=(X_test, y_test),
                             batch_size=10)
 
@@ -197,7 +195,7 @@ if __name__ == '__main__':
         print("Loss:  {:.4f}".format(test_loss))
         model.summary()
 
-        print_time ()
+        plot_history (history)
 
     if model_to_run == 3:
 
@@ -217,11 +215,6 @@ if __name__ == '__main__':
 
         print(reviews_train[2])
         print(X_train[2])
-
-        # for word in ['the', 'all', 'happy', 'sad']:
-        #      print(word,':',tokenizer.word_index[word])
-
-
 
         # Use 500 as the CURRENT Max number of words per review: 448
         maxlen = 500
@@ -248,7 +241,7 @@ if __name__ == '__main__':
         print_time ()
         history = model.fit(X_train, y_train,
                             epochs=number_epochs,
-                            verbose=False,
+                            verbose=True,
                             validation_data=(X_test, y_test),
                             batch_size=10)
 
@@ -319,7 +312,7 @@ if __name__ == '__main__':
 
         history = model.fit(X_train, y_train,
                             epochs=number_epochs,
-                            verbose=False,
+                            verbose=True,
                             validation_data=(X_test, y_test),
                             batch_size=10)
 
@@ -328,7 +321,6 @@ if __name__ == '__main__':
         loss, accuracy = model.evaluate(X_test, y_test, verbose=False)
         print("Testing Accuracy:  {:.4f}".format(accuracy))
         plot_history(history)
-
 
     if model_to_run == 5:
         print('Model 5')
@@ -384,7 +376,7 @@ if __name__ == '__main__':
 
         history = model.fit(X_train, y_train,
                             epochs=number_epochs,
-                            verbose=False,
+                            verbose=True,
                             validation_data=(X_test, y_test),
                             batch_size=10)
         loss, accuracy = model.evaluate(X_train, y_train, verbose=False)
@@ -393,8 +385,7 @@ if __name__ == '__main__':
         print("Testing Accuracy:  {:.4f}".format(accuracy))
         plot_history(history)
 
-    if model_to_run == 6:
-        print('Model 6')
+
 
 
 
