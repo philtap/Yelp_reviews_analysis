@@ -1,6 +1,32 @@
-#######################################################################################
+########################################################################################################################
 # Yelp - review text preprocessing
-#######################################################################################
+#
+#  Review_Preprocess.py
+#
+# This python program take as input a file containing reviews and applies preprocessing
+# using Natural Language Processing (NLP)
+# It does the following:
+# - converts review text to lowercase
+# - removes punctuation
+#  - removes stop words
+#  - removes words that are not frequent in the vocabulary (set of words found in all reviews)
+#   this operation is done using the threshold input parameter. Any words appearing less time than the
+#   threshold in the vocabulary is removed form all reviews
+#  - removes any review become empty as the result of the above
+# The output is placed in the output file (path and name) provided as input parameter 2
+########################################################################################################################
+
+########################################################################################################################
+# Parameters:
+# 1. Input Review local file path and name
+# 2. Output review local subset file path and name
+# 3. Word Frequency Threshold:
+#
+# Example of usage:
+# ./Execute_Review_Preprocess.sh /home/hduser/Desktop/DMML2/yelp_dataset/sample_reviews/reviews_stratified.csv
+#                                /home/hduser/Desktop/DMML2/yelp_dataset/processed_review_data/reviews_preprocessed.csv
+#                                5
+########################################################################################################################
 
 #########################################
 # Dependencies
@@ -24,18 +50,23 @@ from sklearn.feature_extraction import text
 def print_time ():
     # Print date time for performance
     now = datetime.now()
-    # dd/mm/YY H:M:S
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     print("date and time =", dt_string)
 
 def statistics (df):
+    # This function provide statistics about reviews/words in the data set
+    # - total number of reviews,
+    # - total number of words
+    # - min-avg-max words per review
+    # - distinct words in the data set reviews
+    # Run before and after the preprocessing, it is useful to evaluate its effect on the data set
 
     print("Number of rows in dataframe:", len(df["text"]))
     print ("Min number of words per review:" , df["word count"].min())
     print ("Average number of words per review:" , round(df ["word count"].mean()))
     print ("Max number of words per review:" , df ["word count"].max())
     print ("Total number of words in all reviews:" , df ["word count"].sum())
-      # Find distinct number of words
+    # Find distinct number of words
     results = Counter()
     df["text"].str.lower().str.split().apply(results.update)
     print("Number of distinct words in all reviews: ", len(results))
