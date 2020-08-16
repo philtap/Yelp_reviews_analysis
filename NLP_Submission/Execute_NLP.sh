@@ -2,7 +2,8 @@ echo -**********************************************************-
 echo      Script:Execute_NLP.sh
 echo -**********************************************************-
 ##################################################################################################################################################
-#./Execute_NLP.sh reviews_stratified.csv  ~/Desktop/DMML2/yelp_dataset/glove_word_embeddings/glove.6B.50d.txt > ./logs/Execute_NLP_2020_08_18_09_50.log
+# Example of call:
+#./Execute_NLP.sh ./preprocessed/reviews_stratified.csv  ./glove/glove_word_embeddings/glove.6B.100d.txt > ./logs/Execute_NLP_2020_08_18_12_01_00.log
 ###################################################################################################################################################
 echo -**********************************************************-
 echo            Input parameters
@@ -43,6 +44,6 @@ echo -**********************************************************-
 echo Running NLP.py - raw reviews ....
 echo -**********************************************************-
 echo "Executing NLP using the Raw file"
-#python3 NLP.py $1 $2 Model_Raw.hdf5
+python3 NLP.py $1 $2 Model_Raw.hdf5
 
 
