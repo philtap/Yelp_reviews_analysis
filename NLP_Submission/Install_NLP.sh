@@ -22,4 +22,5 @@ wget http://nlp.stanford.edu/data/glove.6B.zip
 unzip glove.6B.zip
 mkdir glove
 mv glove.6B.100d.txt ./glove
+mv glove.6B.50d.txt ./glove
 rm glove.6B*

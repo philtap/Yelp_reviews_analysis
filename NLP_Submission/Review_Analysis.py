@@ -6,11 +6,12 @@
 ########################################################################################################################
 # Parameters:
 # 1. Input Review local file path and name
-# 2. Input Model number to run
-# 3. Number of epochs to run
+# 2. Glove pre-trained embeddings 50B - file path and name
+# 3. Input Model number to run
+# 4. Number of epochs to run
 #
 # Example of usage: Run model 3 on preprocessed data with 5 epochs
-# ./Execute_Review_Analysis.sh /home/hduser/Desktop/DMML2/yelp_dataset/processed_review_data/reviews_preprocessed.csv 3 5
+# ./Execute_Review_Analysis.sh ./processed_data/reviews_preprocessed.csv ./glove/glove.6B.50d.txt 3 5
 #
 # Origin: https://github.com/philtap/Yelp_reviews_analysis/blob/master/Review_Analysis/Review_Analysis.py
 ########################################################################################################################
@@ -95,6 +96,12 @@ if __name__ == '__main__':
         help='The input reviews file (preprocessed)'
     )
     parser.add_argument(
+        'in_glove_file',
+        type=str,
+        help='The pretrioned word embeddings'
+    )
+
+    parser.add_argument(
         'in_model_number',
         type=str,
         help='The model number to run'
@@ -106,10 +113,14 @@ if __name__ == '__main__':
         help='Number of epochs to run'
     )
 
+
+
     args = parser.parse_args()
     in_reviews_csv_file = args.in_reviews_file
+    in_glove_file = args.in_glove_file
     model_to_run = int(args.in_model_number)
     number_epochs = int(args.in_number_epochs)
+
 
     print ('Review file: ' ,  in_reviews_csv_file)
     print ('Model to run: ' ,  model_to_run)
@@ -316,10 +327,10 @@ if __name__ == '__main__':
             return embedding_matrix
         embedding_dim = 50
         embedding_matrix = create_embedding_matrix(
-                'data/glove_word_embeddings/glove.6B.50d.txt', tokenizer.word_index, embedding_dim)
+                in_glove_file, tokenizer.word_index, embedding_dim)
 
         nonzero_elements = np.count_nonzero(np.count_nonzero(embedding_matrix, axis=1))
-        print ('Percentage of words in the prtrained model',nonzero_elements / vocab_size)
+        print ('Percentage of words in the pretrained model',nonzero_elements / vocab_size)
 
         model = Sequential()
 
