@@ -24,7 +24,8 @@ echo            Input parameters
 echo -**********************************************************-
 
 echo Input stratified sample review file - path and name: $1
-echo Pre-trained GloVe text embeddings - path and name: $2
+echo Pre-trained GloVe text embeddings 100d  - path and name: $2
+echo Pre-trained GloVe text embeddings 50d   - path and name: $3
 
 echo -**********************************************************-
 echo Running Text_Preprocessing.py....
