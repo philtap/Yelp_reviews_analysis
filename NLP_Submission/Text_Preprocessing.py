@@ -1,0 +1,224 @@
+import csv
+import os
+import numpy as np
+import nltk
+from nltk.stem.snowball import SnowballStemmer
+from nltk.tokenize import RegexpTokenizer
+from nltk.corpus import stopwords
+import re
+import string
+import argparse
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(
+        description = 'The text pre-processing'
+    )
+
+    parser.add_argument(
+        'in_csv_file',
+        type=str,
+        help='The input CSV file delimited by "|"'
+    )
+
+    parser.add_argument(
+        'out_csv_file',
+        type=str,
+        help='The input CSV file delimited by "|"'
+    )
+
+    args = parser.parse_args()
+
+    in_csv_file = args.in_csv_file
+    out_csv_file = args.out_csv_file  
+
+
+    stemmer = SnowballStemmer("english")
+    tokenizer = RegexpTokenizer(r'\w+')
+
+    #The list of contractions to be expanded
+    contractions = {
+        "ain't": "am not", # / are not / is not / has not / have not
+        "aren't": "are not", #  / am not
+        "can't": "cannot",
+        "can't've": "cannot have",
+        "'cause": "because",
+        "could've": "could have",
+        "couldn't": "could not",
+        "couldn't've": "could not have",
+        "didn't": "did not",
+        "doesn't": "does not",
+        "don't": "do not",
+        "hadn't": "had not",
+        "hadn't've": "had not have",
+        "hasn't": "has not",
+        "haven't": "have not",
+        "he'd": "he had", # / he would
+        "he'd've": "he would have",
+        "he'll": "he shall", # / he will
+        "he'll've": "he shall have", #  / he will have
+        "he's": "he has", # / he is
+        "how'd": "how did",
+        "how'd'y": "how do you",
+        "how'll": "how will",
+        "how's": "how has", # / how is / how does
+        "i'd": "i had", #  / i would
+        "i'd've": "i would have",
+        "i'll": "i shall",  #/ i will
+        "i'll've": "i shall have", # / i will have
+        "i'm": "i am",
+        "i've": "i have",
+        "isn't": "is not",
+        "it'd": "it had", # / it would
+        "it'd've": "it would have",
+        "it'll": "it shall", # / it will
+        "it'll've": "it shall have", #/ it will have
+        "it's": "it has", # / it is
+        "let's": "let us",
+        "ma'am": "madam",
+        "mayn't": "may not",
+        "might've": "might have",
+        "mightn't": "might not",
+        "mightn't've": "might not have",
+        "must've": "must have",
+        "mustn't": "must not",
+        "mustn't've": "must not have",
+        "needn't": "need not",
+        "needn't've": "need not have",
+        "o'clock": "of the clock",
+        "oughtn't": "ought not",
+        "oughtn't've": "ought not have",
+        "shan't": "shall not",
+        "sha'n't": "shall not",
+        "shan't've": "shall not have",
+        "she'd": "she had", # / she would
+        "she'd've": "she would have",
+        "she'll": "she shall", # / she will
+        "she'll've": "she shall have", # / she will have
+        "she's": "she has", # / she is
+        "should've": "should have",
+        "shouldn't": "should not",
+        "shouldn't've": "should not have",
+        "so've": "so have",
+        "so's": "so as", # / so is
+        "that'd": "that would", # / that had
+        "that'd've": "that would have",
+        "that's": "that has", # / that is
+        "there'd": "there had", # / there would
+        "there'd've": "there would have",
+        "there's": "there has", # / there is
+        "they'd": "they had", # / they would
+        "they'd've": "they would have",
+        "they'll": "they shall", # / they will
+        "they'll've": "they shall have", #  / they will have
+        "they're": "they are",
+        "they've": "they have",
+        "to've": "to have",
+        "wasn't": "was not",
+        "we'd": "we had", # / we would
+        "we'd've": "we would have",
+        "we'll": "we will",
+        "we'll've": "we will have",
+        "we're": "we are",
+        "we've": "we have",
+        "weren't": "were not",
+        "what'll": "what shall", # / what will
+        "what'll've": "what shall have", # / what will have
+        "what're": "what are",
+        "what's": "what has", # / what is
+        "what've": "what have",
+        "when's": "when has", # / when is
+        "when've": "when have",
+        "where'd": "where did",
+        "where's": "where has", # / where is
+        "where've": "where have",
+        "who'll": "who shall", #/ who will
+        "who'll've": "who shall have", # / who will have
+        "who's": "who has", # / who is
+        "who've": "who have",
+        "why's": "why has", # / why is
+        "why've": "why have",
+        "will've": "will have",
+        "won't": "will not",
+        "won't've": "will not have",
+        "would've": "would have",
+        "wouldn't": "would not",
+        "wouldn't've": "would not have",
+        "y'all": "you all",
+        "y'all'd": "you all would",
+        "y'all'd've": "you all would have",
+        "y'all're": "you all are",
+        "y'all've": "you all have",
+        "you'd": "you had", # / you would
+        "you'd've": "you would have",
+        "you'll": "you shall", # / you will
+        "you'll've": "you shall have", # / you will have
+        "you're": "you are",
+        "you've": "you have"
+    }
+
+    #The function to expand contractions
+    contractions_re = re.compile('(%s)' % '|'.join(contractions.keys()))
+    def expand_contractions(s):
+        def replace(match):
+            return contractions[match.group(0)]
+        return contractions_re.sub(replace, s)
+
+    #The Stemming Function
+    def Remove_Duplicates(text):
+        output = nltk.word_tokenize(text)
+        output = list(set([stemmer.stem(y) for y in output]))
+        output = ' '.join(output)
+        return output
+
+    #The function to remove stopwords
+    SW = stopwords.words('english')
+    def cleantxt(text):
+        """
+        this removes all stopwords and puncuations
+        :param The input string:
+        :return The string without stop words and punctuation:
+        """
+        output = [word for word in text if word not in string.punctuation]
+        output = ''.join(output)
+        output = [word.lower() for word in output.split() if word.lower() not in SW]
+        output = ' '.join(output)
+        return output
+
+
+    with open(in_csv_file , 'rt' , encoding='utf-8') as In, open(out_csv_file , 'w') as Out:
+        w = csv.writer(Out, delimiter = '|')
+        x = 0
+        print('Writing rows to CSV file')
+        for record in csv.reader(In, delimiter = '|', escapechar='\\', quotechar = "'"):
+            record_np = np.array(record)
+
+            #Get rid of Backslashes
+            record_np[7] = record_np[7].replace('\\' , "")
+
+            #Get rid of quote characters
+            record_np[7] = record_np[7].replace('"' , "")
+
+            #Convert to Lower case
+            record_np[7] = record_np[7].lower()
+
+            #Expand Contractions
+            record_np[7] = expand_contractions(record_np[7])
+
+            record_np[7] = ' '.join(tokenizer.tokenize(record_np[7]))
+
+            #Stem words
+            record_np[7] = Remove_Duplicates(record_np[7])
+
+            #Remove stop words
+            record_np[7] = cleantxt(record_np[7])
+
+            #remove unneccesary data column
+            #record_np = record_np[:7]
+            record_out = record_np.tolist()
+
+            #print(record_out)
+            w.writerow(record_out)
+
+
+
