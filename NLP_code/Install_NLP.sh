@@ -16,7 +16,7 @@ echo ------------------------------------------
 python3 -m nltk.downloader stopwords
 
 echo ------------------------------------------------
-echo Downloading NLTK stopwords in the glove folder
+echo Downloading pre-trined word embeddings from glove
 echo ------------------------------------------------
 wget http://nlp.stanford.edu/data/glove.6B.zip
 unzip glove.6B.zip
